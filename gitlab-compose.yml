@@ -54,9 +54,9 @@ services:
       - postgresql:/var/lib/postgresql
       - postgresql_data:/var/lib/postgresql/data
 volumes:
-  sonarqube_data:
-  sonarqube_extensions:
-  sonarqube_logs:
-  postgresql:
-  postgresql_data:
+  sonarqube_data: null
+  sonarqube_extensions: null
+  sonarqube_logs: null
+  postgresql: null
+  postgresql_data: null
 networks: {}
