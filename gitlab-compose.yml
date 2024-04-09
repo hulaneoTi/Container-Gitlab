@@ -1,14 +1,14 @@
 version: "3.6"
 services:
   gitlab:
-    image: gitlab/gitlab-ce:latest
     container_name: gitlab
+    image: gitlab/gitlab-ce:latest
     restart: always
     hostname: gitlab.example.com
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        # Add any other gitlab.rb configuration here, each on its own line
-        external_url 'https://gitlab.example.com'
+        external_url 'https://192.168.254.204'
+        registry_external_url 'https://192.168.254.204:5005'
     ports:
       - 80:80
       - 443:443
@@ -18,4 +18,45 @@ services:
       - $GITLAB_HOME/logs:/var/log/gitlab
       - $GITLAB_HOME/data:/var/opt/gitlab
     shm_size: 256m
+  jenkins:
+    container_name: jenkins
+    image: jenkins/jenkins:lts
+    privileged: true
+    user: root
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - /home/${myname}/jenkins_compose/jenkins_configuration:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+  sonarqube:
+    container_name: sonarqube
+    image: sonarqube:community
+    depends_on:
+      - db
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
+      SONAR_JDBC_USERNAME: sonar
+      SONAR_JDBC_PASSWORD: sonar
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    ports:
+      - 9000:9000
+  db:
+    container_name: sonarqube_db
+    image: postgres:12
+    environment:
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: sonar
+    volumes:
+      - postgresql:/var/lib/postgresql
+      - postgresql_data:/var/lib/postgresql/data
+volumes:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
+  postgresql:
+  postgresql_data:
 networks: {}
