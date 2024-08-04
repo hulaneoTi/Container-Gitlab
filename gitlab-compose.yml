@@ -7,8 +7,8 @@ services:
     hostname: gitlab.example.com
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'https://192.168.254.204'
-        registry_external_url 'https://192.168.254.204:5005'
+        external_url 'https://localhost'
+        registry_external_url 'https://localhost:5005'
     ports:
       - 80:80
       - 443:443
