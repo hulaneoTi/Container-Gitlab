@@ -14,9 +14,9 @@ services:
       - 443:443
       - 2222:22
     volumes:
-      - $GITLAB_HOME/config:/etc/gitlab
-      - $GITLAB_HOME/logs:/var/log/gitlab
-      - $GITLAB_HOME/data:/var/opt/gitlab
+      -  /home/${myname}/gitlab/gitlab/config:/etc/gitlab
+      - /home/${myname}/gitlab/gitlab/logs:/var/log/gitlab
+      - /home/${myname}/gitlab/gitlab/data:/var/opt/gitlab
     shm_size: 256m
   jenkins:
     container_name: jenkins
@@ -27,7 +27,7 @@ services:
       - 8080:8080
       - 50000:50000
     volumes:
-      - /home/${myname}/jenkins_compose/jenkins_configuration:/var/jenkins_home
+      - /home/${myname}/gitlab/jenkins/jenkins_configuration:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
   sonarqube:
     container_name: sonarqube
@@ -39,9 +39,9 @@ services:
       SONAR_JDBC_USERNAME: sonar
       SONAR_JDBC_PASSWORD: sonar
     volumes:
-      - sonarqube_data:/opt/sonarqube/data
-      - sonarqube_extensions:/opt/sonarqube/extensions
-      - sonarqube_logs:/opt/sonarqube/logs
+      - /home/${myname}/gitlab/sonarqube/sonarqube_data:/opt/sonarqube/data
+      - /home/${myname}/gitlab/sonarqube/sonarqube_extensions:/opt/sonarqube/extensions
+      - /home/${myname}/gitlab/sonarqube/sonarqube_logs:/opt/sonarqube/logs
     ports:
       - 9000:9000
   db:
@@ -51,8 +51,8 @@ services:
       POSTGRES_USER: sonar
       POSTGRES_PASSWORD: sonar
     volumes:
-      - postgresql:/var/lib/postgresql
-      - postgresql_data:/var/lib/postgresql/data
+      - /home/${myname}/gitlab/sonarqube_db/postgresql:/var/lib/postgresql
+      - /home/${myname}/gitlab/sonarqube_db/postgresql_data:/var/lib/postgresql/data
 volumes:
   sonarqube_data: null
   sonarqube_extensions: null
